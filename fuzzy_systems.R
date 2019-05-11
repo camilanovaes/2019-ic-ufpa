@@ -26,21 +26,17 @@ rules = set(
   fuzzy_rule(Umid_Solo %is% Wet, Irr_Duration %is% Zero),
   fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Cold, Irr_Duration %is% Short),
   fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Luminosidade %is% Light, Irr_Duration %is% VeryShort),
-  #fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Luminosidade %isnot% Light, Irr_Duration %is% Short),
   fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Luminosidade %is% Medium, Irr_Duration %is% Short),
   fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Luminosidade %is% Dark, Irr_Duration %is% Short),
-  
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Luminosidade %is% Light, Irr_Duration %is% Zero),
   fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Luminosidade %is% Medium, Irr_Duration %is% VeryShort),
   fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Luminosidade %is% Dark, Irr_Duration %is% Long),
   fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Cold, Irr_Duration %is% VeryLong),
   fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Luminosidade %is% Light, Irr_Duration %is% Short),
-  #fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Luminosidade %isnot% Light, Irr_Duration %is% Short),
   fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Luminosidade %is% Medium, Irr_Duration %is% Long),
   fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Luminosidade %is% Dark, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Hot && Luminosidade %is% Light, Irr_Duration %is% Zero),
   fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Hot && Luminosidade %is% Medium, Irr_Duration %is% VeryShort),
   fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Hot && Luminosidade %is% Dark, Irr_Duration %is% VeryLong),
+  fuzzy_rule(Temperatura %is% Hot && Luminosidade %is% Light, Irr_Duration %is% Zero)
 )
 
 modelo <- fuzzy_system(variables, rules)
