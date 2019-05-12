@@ -36,7 +36,7 @@ rules = set(
   fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Hot || Umid_Rel %is% Low, Irr_Duration %is% VeryLong),
   fuzzy_rule(Umid_Solo %is% Dry && Umid_Rel %is% Medium, Irr_Duration %is% Long),
   fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Cold && Umid_Rel %is% High, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% High, Irr_Duration %is% VeryLog)
+  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% High, Irr_Duration %is% VeryLong)
   )
 
 modelo <- fuzzy_system(variables, rules)
@@ -48,16 +48,15 @@ plot(Temperatura)
 plot(Umid_Rel)
 plot(Irr_Duration)
 
-
-fi <- fuzzy_inference(modelo, list(Umid_Solo = 19, Temperatura = 27, Umid_Rel = 20))
+fi <- fuzzy_inference(modelo, list(Temperatura = 30, Umid_Rel = 20, Umid_Solo = 20))
 plot(fi)
 
-#a = ex.1[1][1]
-#plot(Irr_Duration)
-#par(new=T)
-#plot(ex.1, col = 2)
-#gset_defuzzify(ex.1, "centroid")
-#abline(v=gset_defuzzify(ex.1, "centroid"), col="blue")
+a = fi[1][1]
+plot(Irr_Duration)
+par(new=T)
+plot(fi, col = 2)
+gset_defuzzify(fi, "centroid")
+abline(v=gset_defuzzify(fi, "centroid"), col="blue")
 
 
 #par(mfrow=c(3,3))
