@@ -1,52 +1,54 @@
 library(sets)
-sets_options("universe", seq(1, 200, 0.5))
+sets_options("universe", seq(1, 100, 0.5))
 
-Temperatura = fuzzy_variable(Cold = fuzzy_trapezoid(corners = c(-10, 0, 25, 30)),
-                             Medium = fuzzy_cone(corners = c(30, 5)),
-                             Hot = fuzzy_trapezoid(corners = c(30, 35, 200, 240)))
+Temperatura  = fuzzy_variable(Cold      = fuzzy_normal(-20, 15),
+                              Medium    = fuzzy_normal(10, 15),
+                              Hot       = fuzzy_normal(40, 15))
 
-Luminosidade = fuzzy_variable(Dark = fuzzy_trapezoid(-10, 0, 0.4,0.6),
-                           Medium = fuzzy_trapezoid(0.4, 0.6,9000,10000),
-                           Light = fuzzy_trapezoid(9000, 10000, 12000,13000))
+Umid_Rel     = fuzzy_variable(Low       = fuzzy_cone(12.5, 12.5),
+                              Medium    = fuzzy_cone(32.5, 12.5),
+                              High      = fuzzy_cone(52.2, 12.5))
 
-Umid_Solo = fuzzy_variable(Dry = fuzzy_trapezoid(-10, 0, 17, 34),
-                         Medium = fuzzy_cone(34, 17),
-                         Wet = fuzzy_trapezoid(34, 51, 80, 100))
+Umid_Solo    = fuzzy_variable(Dry       = fuzzy_trapezoid(corners = c(-10, 0, 10, 20)),
+                              Medium    = fuzzy_trapezoid(corners = c(15, 20, 30, 35)),
+                              Wet       = fuzzy_trapezoid(corners = c(30, 40, 60, 70)))
 
-Irr_Duration = fuzzy_variable(Zero = fuzzy_cone(0,8),
-                              VeryShort = fuzzy_cone(8,8),
-                              Short = fuzzy_cone (16,8),
-                              Long = fuzzy_cone (24,8),
-                              VeryLong = fuzzy_cone(32,8))
+Irr_Duration = fuzzy_variable(Zero      = fuzzy_cone(10,10),
+                              VeryShort = fuzzy_cone(30,15),
+                              Short     = fuzzy_cone (55,15),
+                              Long      = fuzzy_cone (75,10),
+                              VeryLong  = fuzzy_cone(90,10))
 
-
-variables = set(Temperatura, Luminosidade, Umid_Solo, Irr_Duration)
+variables = set(Temperatura, Umid_Rel, Umid_Solo, Irr_Duration)
 
 rules = set(
   fuzzy_rule(Umid_Solo %is% Wet, Irr_Duration %is% Zero),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Cold, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Luminosidade %is% Light, Irr_Duration %is% VeryShort),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Luminosidade %is% Medium, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Luminosidade %is% Dark, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Luminosidade %is% Medium, Irr_Duration %is% VeryShort),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Luminosidade %is% Dark, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Cold, Irr_Duration %is% VeryLong),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Luminosidade %is% Light, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Luminosidade %is% Medium, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Luminosidade %is% Dark, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Hot && Luminosidade %is% Medium, Irr_Duration %is% VeryShort),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Hot && Luminosidade %is% Dark, Irr_Duration %is% VeryLong),
-  fuzzy_rule(Temperatura %is% Hot && Luminosidade %is% Light, Irr_Duration %is% Zero)
+  
+  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Cold && Umid_Rel %is% Low, Irr_Duration %is% Zero),
+  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Umid_Rel %is% Low, Irr_Duration %is% VeryShort),
+  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Umid_Rel %is% Medium, Irr_Duration %is% Short),
+  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Medium && Umid_Rel %is% High, Irr_Duration %is% Short),
+  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Low, Irr_Duration %is% Short),
+  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Medium, Irr_Duration %is% Long),
+
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Low && Umid_Rel %is% Low, Irr_Duration %is% VeryShort),
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Low && Umid_Rel %is% Medium, Irr_Duration %is% Short),
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Low && Umid_Rel %is% High, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Low && Umid_Rel %is% Low, Irr_Duration %is% VeryShort),
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% Low, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% Medium, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% High, Irr_Duration %is% VeryLog),
+  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Hot, Irr_Duration %is% VeryLong)
 )
 
 modelo <- fuzzy_system(variables, rules)
 print(modelo)
 plot(modelo) 
 
-#plot(Umid_Solo)
-#plot(Temperatura)
-#plot(Luminosidade)
-#plot(Irr_Duration)
+plot(Umid_Solo)
+plot(Temperatura)
+plot(Umid_Rel)
+plot(Irr_Duration)
 
 
 #ex.1 <- fuzzy_inference(modelo, list(Umid_Solo = 19, Temperatura = 27, Luminosidade = 100))
@@ -60,16 +62,16 @@ plot(modelo)
 #abline(v=gset_defuzzify(ex.1, "centroid"), col="blue")
 
 
-par(mfrow=c(3,3))
-result = list(); cont = 0
-for (i in seq(5, 50, by=5)){
-  t=45
-  us= 100
-  l= 11000
-  cont = cont+1
-result[[cont]] <- fuzzy_inference(modelo, list(Temperatura = 50-1*i, Umid_Solo = us-2*i, Luminosidade = l - 230*i))
-  plot(result[[cont]])
-  print(paste(v-1*i, us - 2*i, l - 230*i, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
-}
+#par(mfrow=c(3,3))
+#result = list(); cont = 0
+#for (i in seq(5, 50, by=5)){
+#  t=45
+#  us= 100
+#  l= 11000
+#  cont = cont+1
+#result[[cont]] <- fuzzy_inference(modelo, list(Temperatura = 50-1*i, Umid_Solo = us-2*i, Luminosidade = l - 230*i))
+#  plot(result[[cont]])
+#  print(paste(v-1*i, us - 2*i, l - 230*i, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
+#}
 
                         
