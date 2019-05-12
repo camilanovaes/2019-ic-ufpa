@@ -27,16 +27,16 @@ rules = set(
   fuzzy_rule(Umid_Solo %is% Wet && Umid_Rel %is% Medium && Temperatura %is% Medium, Irr_Duration %is% VeryShort),
   fuzzy_rule(Umid_Solo %is% Wet && Umid_Rel %is% Low || Temperatura %is% Hot , Irr_Duration %is% Short),
   
-  fuzzy_rule(Umid_solo %is% Medium && Umid_Rel %is% Low, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_solo %is% Medium && Umid_Rel %is% Medium, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_solo %is% Medium && Umid_Rel %is% High, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Low, Irr_Duration %is% VeryLong),
-  fuzzy_rule(Umid_solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Medium, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_Solo %is% Medium && Umid_Rel %is% Low, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_Solo %is% Medium && Umid_Rel %is% Medium, Irr_Duration %is% Short),
+  fuzzy_rule(Umid_Solo %is% Medium && Umid_Rel %is% High, Irr_Duration %is% Short),
+  fuzzy_rule(Umid_Solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Low, Irr_Duration %is% VeryLong),
+  fuzzy_rule(Umid_Solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Medium, Irr_Duration %is% Long),
 
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Hot || Umid_Rel %is% Low, Irr_Duration %is% VeryLong),
-  fuzzy_rule(Umid_solo %is% Dry && Umid_Rel %is% Medium, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Cold && Umid_Rel %is% High, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% High, Irr_Duration %is% VeryLog)
+  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Hot || Umid_Rel %is% Low, Irr_Duration %is% VeryLong),
+  fuzzy_rule(Umid_Solo %is% Dry && Umid_Rel %is% Medium, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Cold && Umid_Rel %is% High, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% High, Irr_Duration %is% VeryLog)
   )
 
 modelo <- fuzzy_system(variables, rules)
