@@ -49,8 +49,8 @@ plot(Umid_Rel)
 plot(Irr_Duration)
 
 
-#ex.1 <- fuzzy_inference(modelo, list(Umid_Solo = 19, Temperatura = 27, Luminosidade = 100))
-#plot(ex.1)
+fi <- fuzzy_inference(modelo, list(Umid_Solo = 19, Temperatura = 27, Umid_Rel = 20))
+plot(fi)
 
 #a = ex.1[1][1]
 #plot(Irr_Duration)
