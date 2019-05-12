@@ -1,9 +1,9 @@
 library(sets)
 sets_options("universe", seq(1, 100, 0.5))
 
-Temperatura  = fuzzy_variable(Cold      = fuzzy_normal(0, 15),
-                              Medium    = fuzzy_normal(50, 15),
-                              Hot       = fuzzy_normal(100, 15))
+Temperatura  = fuzzy_variable(Cold      = fuzzy_normal(0, 10),
+                              Medium    = fuzzy_normal(30, 10),
+                              Hot       = fuzzy_normal(60, 10))
 
 Umid_Rel     = fuzzy_variable(Low       = fuzzy_cone(12.5, 12.5),
                               Medium    = fuzzy_cone(32.5, 12.5),
