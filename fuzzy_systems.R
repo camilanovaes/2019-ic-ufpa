@@ -25,7 +25,7 @@ rules = set(
   fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Alto, Irr_Duration %is% Zero),
   fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Medio && Temperatura %is% Frio, Irr_Duration %is% Zero),
   fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Medio && Temperatura %is% Medio, Irr_Duration %is% MuitoBaixo),
-  fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Baixo || Temperatura %is% Quente , Irr_Duration %is% Baixo),
+  fuzzy_rule(Umid_Solo %is% Molhado && (Umid_Rel %is% Baixo || Temperatura %is% Quente) , Irr_Duration %is% Baixo),
   
   fuzzy_rule(Umid_Solo %is% Medio && Umid_Rel %is% Baixo, Irr_Duration %is% Longo),
   fuzzy_rule(Umid_Solo %is% Baixo && Umid_Rel %is% Baixo, Irr_Duration %is% Baixo),
@@ -33,7 +33,7 @@ rules = set(
   fuzzy_rule(Umid_Solo %is% Medio && Temperatura %is% Quente && Umid_Rel %is% Baixo, Irr_Duration %is% MuitoLongo),
   fuzzy_rule(Umid_Solo %is% Medio && Temperatura %is% Quente && Umid_Rel %is% Medium, Irr_Duration %is% Longo),
 
-  fuzzy_rule(Umid_Solo %is% Seco && Temperatura %is% Quente || Umid_Rel %is% Baixo, Irr_Duration %is% MuitoLongo),
+  fuzzy_rule(Umid_Solo %is% Seco && (Temperatura %is% Quente || Umid_Rel %is% Baixo), Irr_Duration %is% MuitoLongo),
   fuzzy_rule(Umid_Solo %is% Seco && Umid_Rel %is% Medio, Irr_Duration %is% Longo),
   fuzzy_rule(Umid_Solo %is% Seco && Temperatura %is% Frio && Umid_Rel %is% Alto, Irr_Duration %is% Longo),
   fuzzy_rule(Umid_Solo %is% Seco && Temperatura %is% Medio && Umid_Rel %is% Alto, Irr_Duration %is% MuitoLongo)
