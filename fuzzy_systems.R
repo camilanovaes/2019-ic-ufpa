@@ -1,42 +1,42 @@
 library(sets)
 sets_options("universe", seq(1, 100, 0.5))
 
-Temperatura  = fuzzy_variable(Cold      = fuzzy_normal(0, 10),
-                              Medium    = fuzzy_normal(30, 10),
-                              Hot       = fuzzy_normal(60, 10))
+Temperatura  = fuzzy_variable(Frio       = fuzzy_normal(0, 10),
+                              Medio      = fuzzy_normal(30, 10),
+                              Quente     = fuzzy_normal(60, 10))
 
-Umid_Rel     = fuzzy_variable(Low       = fuzzy_cone(12.5, 12.5),
-                              Medium    = fuzzy_cone(32.5, 12.5),
-                              High      = fuzzy_cone(52.2, 12.5))
+Umid_Rel     = fuzzy_variable(Baixo      = fuzzy_cone(12.5, 12.5),
+                              Medio      = fuzzy_cone(32.5, 12.5),
+                              Alto       = fuzzy_cone(52.2, 12.5))
 
-Umid_Solo    = fuzzy_variable(Dry       = fuzzy_trapezoid(corners = c(-10, 0, 10, 20)),
-                              Medium    = fuzzy_trapezoid(corners = c(15, 20, 30, 35)),
-                              Wet       = fuzzy_trapezoid(corners = c(30, 40, 60, 70)))
+Umid_Solo    = fuzzy_variable(Seco       = fuzzy_trapezoid(corners = c(-10, 0, 10, 20)),
+                              Medio      = fuzzy_trapezoid(corners = c(15, 20, 30, 35)),
+                              Molhado    = fuzzy_trapezoid(corners = c(30, 40, 60, 70)))
 
-Irr_Duration = fuzzy_variable(Zero      = fuzzy_cone(10,10),
-                              VeryShort = fuzzy_cone(30,15),
-                              Short     = fuzzy_cone (55,15),
-                              Long      = fuzzy_cone (75,10),
-                              VeryLong  = fuzzy_cone(90,10))
+Irr_Duration = fuzzy_variable(Zero       = fuzzy_cone(10,10),
+                              MuitoBaixo = fuzzy_cone(30,15),
+                              Baixo      = fuzzy_cone (55,15),
+                              Longo      = fuzzy_cone (75,10),
+                              MuitoLongo = fuzzy_cone(90,10))
 
 variables = set(Temperatura, Umid_Rel, Umid_Solo, Irr_Duration)
 
 rules = set(
-  fuzzy_rule(Umid_Solo %is% Wet && Umid_Rel %is% High, Irr_Duration %is% Zero),
-  fuzzy_rule(Umid_Solo %is% Wet && Umid_Rel %is% Medium && Temperatura %is% Cold, Irr_Duration %is% Zero),
-  fuzzy_rule(Umid_Solo %is% Wet && Umid_Rel %is% Medium && Temperatura %is% Medium, Irr_Duration %is% VeryShort),
-  fuzzy_rule(Umid_Solo %is% Wet && Umid_Rel %is% Low || Temperatura %is% Hot , Irr_Duration %is% Short),
+  fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Alto, Irr_Duration %is% Zero),
+  fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Medio && Temperatura %is% Frio, Irr_Duration %is% Zero),
+  fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Medio && Temperatura %is% Medio, Irr_Duration %is% MuitoBaixo),
+  fuzzy_rule(Umid_Solo %is% Molhado && Umid_Rel %is% Baixo || Temperatura %is% Quente , Irr_Duration %is% Baixo),
   
-  fuzzy_rule(Umid_Solo %is% Medium && Umid_Rel %is% Low, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_Solo %is% Medium && Umid_Rel %is% Medium, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_Solo %is% Medium && Umid_Rel %is% High, Irr_Duration %is% Short),
-  fuzzy_rule(Umid_Solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Low, Irr_Duration %is% VeryLong),
-  fuzzy_rule(Umid_Solo %is% Medium && Temperatura %is% Hot && Umid_Rel %is% Medium, Irr_Duration %is% Long),
+  fuzzy_rule(Umid_Solo %is% Medio && Umid_Rel %is% Baixo, Irr_Duration %is% Longo),
+  fuzzy_rule(Umid_Solo %is% Baixo && Umid_Rel %is% Baixo, Irr_Duration %is% Baixo),
+  fuzzy_rule(Umid_Solo %is% Medio && Umid_Rel %is% Alto, Irr_Duration %is% Baixo),
+  fuzzy_rule(Umid_Solo %is% Medio && Temperatura %is% Quente && Umid_Rel %is% Baixo, Irr_Duration %is% MuitoLongo),
+  fuzzy_rule(Umid_Solo %is% Medio && Temperatura %is% Quente && Umid_Rel %is% Medium, Irr_Duration %is% Longo),
 
-  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Hot || Umid_Rel %is% Low, Irr_Duration %is% VeryLong),
-  fuzzy_rule(Umid_Solo %is% Dry && Umid_Rel %is% Medium, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Cold && Umid_Rel %is% High, Irr_Duration %is% Long),
-  fuzzy_rule(Umid_Solo %is% Dry && Temperatura %is% Medium && Umid_Rel %is% High, Irr_Duration %is% VeryLong)
+  fuzzy_rule(Umid_Solo %is% Seco && Temperatura %is% Quente || Umid_Rel %is% Baixo, Irr_Duration %is% MuitoLongo),
+  fuzzy_rule(Umid_Solo %is% Seco && Umid_Rel %is% Medio, Irr_Duration %is% Longo),
+  fuzzy_rule(Umid_Solo %is% Seco && Temperatura %is% Frio && Umid_Rel %is% Alto, Irr_Duration %is% Longo),
+  fuzzy_rule(Umid_Solo %is% Seco && Temperatura %is% Medio && Umid_Rel %is% Alto, Irr_Duration %is% MuitoLongo)
   )
 
 modelo <- fuzzy_system(variables, rules)
