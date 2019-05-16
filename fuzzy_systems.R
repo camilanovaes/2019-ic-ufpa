@@ -1,5 +1,5 @@
 library(sets)
-sets_options("universe", seq(-10, 100, 0.5))
+sets_options("universe", seq(0, 100, 0.5))
 
 Temperatura  = fuzzy_variable(Frio       = fuzzy_normal(-5, 5),
                               Medio      = fuzzy_normal(15, 5),
@@ -41,7 +41,7 @@ rules = set(
 
 modelo <- fuzzy_system(variables, rules)
 print(modelo)
-plot(modelo) 
+plot(modelo)
 
 plot(Umid_Solo)
 plot(Temperatura)
