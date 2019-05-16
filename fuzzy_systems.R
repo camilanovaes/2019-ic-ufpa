@@ -68,6 +68,9 @@ for (i in seq(5, 50, by=5)){
   cont = cont+1
 result[[cont]] <- fuzzy_inference(modelo, list(Temperatura = temp-1*i, Umid_Solo = umd_sl-1.4*i, Umid_Rel = umd_rel - 1.3*i))
   plot(result[[cont]])
+  par(new=T)
+  gset_defuzzify(result[[cont]], "centroid")
+  abline(v=gset_defuzzify(result[[cont]], "centroid"), col="blue")
   print(paste(i,temp-1*i, umd_sl-1.4*i, umd_rel - 1.3*i, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
 }
 
