@@ -117,7 +117,7 @@ for (i in seq(5, 50, by=5)){
 #Plot para as inferências que serão utilizadas no trabalho escrito
 par (mfrow = c(1,2))
 result = list();cont = 0
-for (i in seq(1, 2, by=1)){
+for (i in seq(1, 1, by=1)){
 lwd = 2
 cex.lab = 1.3
 temp= sample(40,1,replace=T)
