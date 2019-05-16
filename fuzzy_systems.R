@@ -1,10 +1,11 @@
 library(sets)
-sets_options("universe", seq(0, 100, 0.5))
 
+sets_options("universe", seq(0, 35, 0.5))
 Temperatura  = fuzzy_variable(Frio       = fuzzy_normal(-5, 5),
                               Medio      = fuzzy_normal(15, 5),
                               Quente     = fuzzy_normal(35, 5))
 
+sets_options("universe", seq(0, 100, 0.5))
 Umid_Rel     = fuzzy_variable(Baixo      = fuzzy_cone(12.5, 12.5),
                               Medio      = fuzzy_cone(32.5, 12.5),
                               Alto       = fuzzy_cone(52.2, 12.5))
@@ -12,12 +13,12 @@ Umid_Rel     = fuzzy_variable(Baixo      = fuzzy_cone(12.5, 12.5),
 Umid_Solo    = fuzzy_variable(Seco       = fuzzy_trapezoid(corners = c(-10, 0, 10, 20)),
                               Medio      = fuzzy_trapezoid(corners = c(15, 20, 30, 35)),
                               Molhado    = fuzzy_trapezoid(corners = c(30, 40, 60, 70)))
-
-Irr_Duration = fuzzy_variable(Zero       = fuzzy_cone(10,10),
-                              MuitoBaixo = fuzzy_cone(30,15),
-                              Baixo      = fuzzy_cone (55,15),
-                              Longo      = fuzzy_cone (75,10),
-                              MuitoLongo = fuzzy_cone(90,10))
+sets_options("universe", seq(0, 32, 0.5))
+Irr_Duration = fuzzy_variable(Zero       = fuzzy_cone(0,8),
+                              MuitoBaixo = fuzzy_cone(8,8),
+                              Baixo      = fuzzy_cone (16,8),
+                              Longo      = fuzzy_cone (24,8),
+                              MuitoLongo = fuzzy_cone(32,8))
 
 variables = set(Temperatura, Umid_Rel, Umid_Solo, Irr_Duration)
 
@@ -42,13 +43,17 @@ rules = set(
 modelo <- fuzzy_system(variables, rules)
 print(modelo)
 plot(modelo)
+lwd = 2
+cex.lab = 1.3
+ylab = "Grau de Pertinência"
 
-plot(Umid_Solo, xlab= "Umidade do Solo (%)", ylab="Grau de Pertinência", xlim=c(0,70))
-plot(Temperatura, xlab="Temperatura (ºC)", ylab="Grau de Pertinência", xlim=c(0,35))
-plot(Umid_Rel, xlab="Umidade Relativa (%)", ylab="Grau de Pertinência", xlim=c(0,70))
-plot(Irr_Duration, xlab="Tempo em minutos (min)", ylab="Grau de Pertinência")
+plot(Umid_Solo,col=c('green','blue','red'), xlab= "Umidade do Solo (%)", ylab=ylab, xlim=c(0,70), lwd = lwd, cex.lab = cex.lab)
+plot(Temperatura,col=c('green','blue','red'), xlab="Temperatura (ºC)", ylab=ylab, xlim=c(0,35), lwd = lwd, cex.lab = cex.lab)
+plot(Umid_Rel,col=c('green','blue','red'), xlab="Umidade Relativa (%)", ylab=ylab, xlim=c(0,70), lwd = lwd, cex.lab = cex.lab)
+plot(Irr_Duration,col=c('green','blue','red','yellow','purple') ,xlab="Tempo em minutos (min)", ylab=ylab, xlim=c(0,32), lwd = lwd, cex.lab = cex.lab)
 
-fi <- fuzzy_inference(modelo, list(Temperatura = 5, Umid_Rel = 7, Umid_Solo = 6.5))
+sets_options("universe", seq(0, 32, 0.5))
+fi <- fuzzy_inference(modelo, list(Temperatura = 0, Umid_Rel = 15, Umid_Solo = 20))
 plot(fi)
 
 a = fi[1][1]
@@ -58,20 +63,52 @@ plot(fi, col = 2)
 gset_defuzzify(fi, "centroid")
 abline(v=gset_defuzzify(fi, "centroid"), col="blue")
 
-
 par(mfrow=c(4,3))
 result = list(); cont = 0
 for (i in seq(5, 50, by=5)){
+  lwd = 2
+  cex.lab = 1.3
   temp=50
   umd_sl= 70
   umd_rel= 65
   cont = cont+1
-result[[cont]] <- fuzzy_inference(modelo, list(Temperatura = temp-1*i, Umid_Solo = umd_sl-1.4*i, Umid_Rel = umd_rel - 1.3*i))
-  plot(result[[cont]])
+  result[[cont]] <- fuzzy_inference(modelo, list(Temperatura = temp-1*i, Umid_Solo = 1.4*i, Umid_Rel = 1.3*i))
+  plot(Irr_Duration,col=c('green','blue','red','yellow','purple') ,
+      xlab="Tempo em minutos (min)", ylab="Grau de Pertinência", xlim=c(0,32)
+      , lwd = lwd, cex.lab = cex.lab)
+  par(new=T)
+  lines(result[[cont]],col = "brown", lwd = lwd+1, type = "h")
   par(new=T)
   gset_defuzzify(result[[cont]], "centroid")
-  abline(v=gset_defuzzify(result[[cont]], "centroid"), col="blue")
-  print(paste(i,temp-1*i, umd_sl-1.4*i, umd_rel - 1.3*i, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
+  abline(v=gset_defuzzify(result[[cont]], "centroid"), col="black", lwd=lwd)
+  print(paste(i,temp-1*i, 1.4*i,1.3*i, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
 }
+#plot(Irr_Duration,col=c('green','blue','red','yellow','purple'),
+#     xlab="Tempo em minutos (min)", ylab="Grau de Pertinência", 
+#     xlim=c(0,32), lwd = lwd, cex.lab = cex.lab); grid();
+#     abline(v=gset_defuzzify(result[[cont]]),col = "brown", lwd = lwd+1);
+#     plot(result[[cont]],col = "brown", lwd = lwd+1); lines(result[[cont]],col = "brown", 
+#                                                            lwd = lwd+1, type = "h")
 
+
+par(mfrow=c(4,3))
+result = list(); cont = 0
+for (i in seq(5, 50, by=5)){
+  lwd = 2
+  cex.lab = 1.3
+  temp=50
+  umd_sl= 70
+  umd_rel= 65
+  cont = cont+1
+  result[[cont]] <- fuzzy_inference(modelo, list(Temperatura = 1*i, Umid_Solo = umd_sl - 1.4*i, Umid_Rel = umd_rel - 1.3*i))
+  plot(Irr_Duration,col=c('green','blue','red','yellow','purple') ,
+       xlab="Tempo em minutos (min)", ylab="Grau de Pertinência", xlim=c(0,32)
+       , lwd = lwd, cex.lab = cex.lab)
+  par(new=T)
+  lines(result[[cont]],col = "brown", lwd = lwd+1, type = "h")
+  par(new=T)
+  gset_defuzzify(result[[cont]], "centroid")
+  abline(v=gset_defuzzify(result[[cont]], "centroid"), col="black")
+  print(paste(i,1*i, umd_sl - 1.4*i, umd_rel - 1.3*i, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
+}
                         
