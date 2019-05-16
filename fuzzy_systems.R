@@ -63,6 +63,7 @@ plot(fi, col = 2)
 gset_defuzzify(fi, "centroid")
 abline(v=gset_defuzzify(fi, "centroid"), col="blue")
 
+#Geração de Inferência com o a redução dos valores de temperatura e aumento dos valores de umidade
 par(mfrow=c(4,3))
 result = list(); cont = 0
 for (i in seq(5, 50, by=5)){
@@ -91,6 +92,7 @@ for (i in seq(5, 50, by=5)){
 #                                                            lwd = lwd+1, type = "h")
 
 
+#Geração de Inferência com o a redução dos valores de umidade e aumento dos valores de temperatura
 par(mfrow=c(4,3))
 result = list(); cont = 0
 for (i in seq(5, 50, by=5)){
@@ -108,7 +110,31 @@ for (i in seq(5, 50, by=5)){
   lines(result[[cont]],col = "brown", lwd = lwd+1, type = "h")
   par(new=T)
   gset_defuzzify(result[[cont]], "centroid")
-  abline(v=gset_defuzzify(result[[cont]], "centroid"), col="black")
+  abline(v=gset_defuzzify(result[[cont]], "centroid"), col="black", lwd=lwd)
   print(paste(i,1*i, umd_sl - 1.4*i, umd_rel - 1.3*i, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
 }
-                        
+
+#Plot para as inferências que serão utilizadas no trabalho escrito
+par (mfrow = c(1,2))
+result = list();cont = 0
+for (i in seq(1, 2, by=1)){
+lwd = 2
+cex.lab = 1.3
+temp= sample(40,1,replace=T)
+umd_sl= sample(70,1,replace = T)
+umd_rel= sample(62,1,replace = T)
+cont = cont+1
+print(paste(temp, umd_sl, umd_rel))
+
+result[[cont]] <- fuzzy_inference(modelo, list(Temperatura = temp, Umid_Solo = umd_sl, Umid_Rel = umd_rel))
+
+plot(Irr_Duration,col=c('green','blue','red','yellow','purple') ,
+     xlab="Tempo em minutos (min)", ylab="Grau de Pertinência", xlim=c(0,32)
+     , lwd = lwd, cex.lab = cex.lab)
+par(new=T)
+lines(result[[cont]],col = "brown", lwd = lwd+1, type = "h")
+par(new=T)
+gset_defuzzify(result[[cont]], "centroid")
+abline(v=gset_defuzzify(result[[cont]], "centroid"), col="black",lwd = lwd)
+print(paste(temp, umd_sl, umd_rel, gset_defuzzify(result[[cont]], "centroid"), sep = " - "))
+}
