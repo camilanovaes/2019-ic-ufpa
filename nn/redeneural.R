@@ -36,11 +36,11 @@ x = seq(0,10, by=0.4)
 y = sin(x)
 plot(x,y,pch=3, col="blue", ylim = c(-1,1))
 
-net = neuralnet(y~x, data=x, hidden=5)
+net = neuralnet(y~x, data=cbind(x,y), hidden=5)
 plot(net)
 net$result.matrix[1:3,]
 
-x2 = seq(0,10, by=0.01)
+x2 = matrix(seq(0,10, by=0.01))
 y2 = compute(net, x2)
 par(new=T)
 plot(x2,y2$net.result, col="red", type = "l", ylim = c(-1,1))
